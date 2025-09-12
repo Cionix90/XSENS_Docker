@@ -1,0 +1,70 @@
+services:
+  ros2_humble_xsens:
+    build:
+      context: .
+      dockerfile: DockerFile
+      args:
+        - WORKSPACE=xsens_mti_600_ws
+
+    container_name: ros_humble_xsens
+    network_mode: "host"
+    # Interactive shell settings
+    stdin_open: true
+    tty: true
+    # Network settings
+
+    # Environment variables
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - XAUTHORITY=/tmp/.docker.xauth
+      - ROS_DOMAIN_ID=0
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      # Shell history
+      - HISTFILE=/home/ros/.bash_history
+      - HISTFILESIZE=10000
+      - RCUTILS_COLORIZED_OUTPUT=1
+      - IGN_GAZEBO_RESOURCE_PATH=/opt/ros/humble/share/
+      - ROBOT_IP=192.168.15.10
+      - LOCAL_DEVICE_NAME=/tmp/ttyUR
+    privileged: true  # Fixed spelling and removed duplicate
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+      - ~/.bash_history:/home/ros/.bash_history
+      - ./src:/home/ros/xsens_mti_600_ws/src
+      - /dev/nvidia0:/dev/nvidia0
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-modeset:/dev/nvidia-modeset
+      - /dev:/dev
+      
+      
+      
+
+    # Command to source ROS2 environment and start shell
+    command: >
+      bash -c "
+      sudo apt update --fix-missing &&
+        source /opt/ros/humble/setup.bash &&
+        if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then \
+        sudo rosdep init \
+        fi &&
+        rosdep update &&
+        sudo gpasswd -a ros dialout && 
+        sudo apt install -y ros-humble-nmea-msgs &&
+        sudo apt install -y ros-humble-mavros-msgs &&
+        echo 'ROS2 humble environment loaded' &&
+        bash
+      "
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+ 
+
+    

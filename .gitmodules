@@ -1,0 +1,3 @@
+[submodule "src/xsens_sdk"]
+	path = src/xsens_sdk
+	url = https://github.com/Cionix90/xsens_sdk.git
