@@ -102,7 +102,10 @@ RUN sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen
 RUN sudo apt install python3-rosdep -y
 RUN sudo rm /etc/ros/rosdep/sources.list.d/20-default.list
 
-
+# # XSENS LIbrary Install 
+# RUN sudo apt update 
+# RUN sudo apt install sharutils
+# COPY MT_Software_Suite_linux-x64_2025.3 /home/${USERNAME}/MT_Software_Suite_linux-x64_2025.3
 
 # RUN sudo rosdep init
 # RUN rosdep update 

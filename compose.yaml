@@ -33,6 +33,7 @@ services:
       # - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
       - ~/.bash_history:/home/ros/.bash_history
       - ./src:/home/ros/xsens_mti_600_ws/src
+      - ./MT_SUITE_UBUNTU_22:/home/ros/MT_SUITE_UBUNTU_22
       - /dev/nvidia0:/dev/nvidia0
       - /dev/nvidiactl:/dev/nvidiactl
       - /dev/nvidia-modeset:/dev/nvidia-modeset
